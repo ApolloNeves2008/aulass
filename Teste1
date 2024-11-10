@@ -1,0 +1,61 @@
+from minecraft import *
+from minecraftstuff import *
+import time
+
+mc = Minecraft.create()
+
+# Função para limpar o espaço antes de criar o zoológico
+def limpar_terreno(x, y, z, comprimento, largura, altura):
+    mc.setBlocks(x, y, z, x + comprimento, y + altura, z + largura, AIR)
+
+# Função para criar paredes
+def construir_parede(x, y, z, comprimento, largura, altura, bloco):
+    mc.setBlocks(x, y, z, x + comprimento, y + altura, z + largura, bloco)
+    mc.setBlocks(x + 1, y + 1, z + 1, x + comprimento - 1, y + altura - 1, z + largura - 1, AIR)
+
+# Função para criar uma entrada com portas
+def criar_entrada(x, y, z):
+    construir_parede(x, y, z, 10, 1, 5, STONE_BRICK)
+    mc.setBlock(x + 5, y + 1, z, AIR)  # Porta de entrada
+    mc.setBlock(x + 5, y + 2, z, AIR)
+
+# Função para criar jaulas
+def criar_jaula(x, y, z, largura, comprimento):
+    construir_parede(x, y, z, largura, comprimento, 3, IRON_BARS)
+    mc.setBlocks(x + 1, y, z + 1, x + largura - 1, y + 2, z + comprimento - 1, GRASS_BLOCK)
+
+# Função para criar área de água para golfinhos
+def criar_area_golfinhos(x, y, z):
+    construir_parede(x, y, z, 10, 10, 5, GLASS)
+    mc.setBlocks(x + 1, y, z + 1, x + 9, y + 4, z + 9, WATER)
+
+# Função para criar gaiola de pássaros
+def criar_gaiola_passaros(x, y, z):
+    construir_parede(x, y, z, 5, 5, 5, GLASS_PANE)
+    mc.setBlocks(x + 1, y, z + 1, x + 4, y + 4, z + 4, AIR)
+    mc.setBlock(x + 2, y, z + 2, OAK_LOG)
+
+# Variáveis de posição inicial
+pos = mc.player.getTilePos()
+x_inicial, y_inicial, z_inicial = pos.x, pos.y, pos.z
+
+# Limpeza do terreno
+limpar_terreno(x_inicial, y_inicial, z_inicial, 50, 50, 10)
+
+# Construir a entrada do zoológico
+criar_entrada(x_inicial + 20, y_inicial, z_inicial)
+
+# Construir as jaulas para animais
+criar_jaula(x_inicial + 5, y_inicial, z_inicial + 10, 10, 10)
+criar_jaula(x_inicial + 20, y_inicial, z_inicial + 10, 10, 10)
+criar_jaula(x_inicial + 35, y_inicial, z_inicial + 10, 10, 10)
+
+# Construir a área de água para golfinhos
+criar_area_golfinhos(x_inicial + 5, y_inicial, z_inicial + 25)
+
+# Construir as gaiolas para pássaros
+criar_gaiola_passaros(x_inicial + 20, y_inicial, z_inicial + 25)
+criar_gaiola_passaros(x_inicial + 35, y_inicial, z_inicial + 25)
+
+# Mensagem de conclusão
+mc.postToChat("Zoológico criado com sucesso!")
